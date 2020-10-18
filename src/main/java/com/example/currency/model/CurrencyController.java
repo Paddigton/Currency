@@ -16,12 +16,12 @@ class CurrencyController {
 
     @GetMapping("/currency/{currencyName}")
     ResponseEntity<CurrencyDto> getCurrency(@PathVariable String currencyName) {
-                CurrencyDto curr = new CurrencyDto();
-        try {
-            Double values = facade.getCurrencyValue(currencyName);
-            curr.setValue(values);
+        CurrencyDto curr = new CurrencyDto();
+        Double currencyValue = facade.getCurrencyValue(currencyName);
+        if (currencyValue != null) {
+            curr.setValue(currencyValue);
             return new ResponseEntity<>(curr, HttpStatus.OK);
-        } catch (Exception e) {
+        } else {
             curr.setError("Nie znaleziono waluty " + currencyName + " w bazie danych.");
             return new ResponseEntity<>(curr, HttpStatus.BAD_REQUEST);
         }
